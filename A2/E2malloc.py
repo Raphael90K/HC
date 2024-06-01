@@ -1,6 +1,7 @@
 import wave
 import numpy as np
 import matplotlib.pyplot as plt
+import tracemalloc
 
 
 def load_wav_file(file_path):
@@ -13,29 +14,30 @@ def load_wav_file(file_path):
         # Read audio data
         audio_data = np.frombuffer(wav_file.readframes(num_frames), dtype=np.int16)
 
+        # If the audio has more than one channel, take only the first one
+        if num_channels > 1:
+            audio_data = audio_data[::num_channels]
+
         # Normalize audio data to range [-1, 1]
         audio_data = audio_data / (2 ** 15)
 
         return audio_data, frame_rate
 
 
-def calculate_windowed_fft(audio_data, sample_rate, window_size_ms, overlap_ms):
+def calculate_windowed_fft(audio_data, malloc: list, window_size, offset):
     """Calculate windowed Fourier transforms for the given audio data."""
-    # Convert window sizes from milliseconds to samples
-    window_size = int(window_size_ms * sample_rate / 1000)
-    overlap = int(overlap_ms * sample_rate / 1000)
-
     # Create a Hamming window of the specified size
     window = np.hamming(window_size)
 
     # List to store all windowed FFT results
     fft_results = []
 
+
+    tracemalloc.start()
     # Perform sliding window Fourier transform
     start = 0
-    end = start + window_size
-
-    while end < len(audio_data):
+    while start + window_size <= len(audio_data):
+        end = start + window_size
         # Apply window to the audio data segment
         segment = audio_data[start:end] * window
 
@@ -45,9 +47,11 @@ def calculate_windowed_fft(audio_data, sample_rate, window_size_ms, overlap_ms):
         # Append the spectrum to the results list
         fft_results.append(spectrum)
 
+        malloc.append([start, tracemalloc.get_traced_memory()])
         # Slide the window
-        start = start + (window_size - overlap)
-        end = start + window_size
+        start = start + offset
+
+    tracemalloc.stop()
 
     return np.array(fft_results)
 
@@ -84,23 +88,26 @@ def plot_mean_and_std_spectrum(mean_spectrum, std_spectrum, sample_rate):
 
 
 def main():
-    file_path = 'Geheimnisvolle_Wellenlaengen.wav'
+    file_path = '../A1/nicht_zu_laut_abspielen.wav'  # Update with your actual file path
 
     # Load the WAV file
     audio_data, sample_rate = load_wav_file(file_path)
 
     # Parameters for windowing and Fourier transform
-    window_size_ms = 128  # Window size in milliseconds
-    overlap_ms = 0  # Overlap size in milliseconds
+    window_size = 44000  # Window size in samples
+    offset = 1000  # Overlap size in samples
 
+    malloc = []
     # Calculate windowed Fourier transforms
-    fft_results = calculate_windowed_fft(audio_data, sample_rate, window_size_ms, overlap_ms)
+    fft_results = calculate_windowed_fft(audio_data, malloc, window_size, offset)
 
     # Calculate mean and standard deviation for each frequency bin
     mean_spectrum, std_spectrum = calculate_statistics(fft_results)
 
     # Plot the mean spectrum and standard deviation spectrum
     plot_mean_and_std_spectrum(mean_spectrum, std_spectrum, sample_rate)
+
+    input()
 
 
 if __name__ == "__main__":
