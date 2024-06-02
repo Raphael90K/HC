@@ -2,7 +2,6 @@ import json
 import matplotlib.pyplot as plt
 import os
 
-import numpy as np
 directory = 'logs/'
 
 # Initialisieren Sie die Figur für das Plotten
