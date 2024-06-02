@@ -79,11 +79,12 @@ def plot_mean_and_std_spectrum(mean_spectrum, std_spectrum, sample_rate):
     plt.ylabel('Magnitude')
     plt.legend()
     plt.grid(True)
+    plt.savefig('Freq_mean_std.png')
     plt.show()
 
 
 def main():
-    file_path = '../A1/nicht_zu_laut_abspielen.wav'  # Update with your actual file path
+    file_path = '../Audios/nicht_zu_laut_abspielen.wav'  # Update with your actual file path
 
     # Load the WAV file
     audio_data, sample_rate = load_wav_file(file_path)
@@ -100,8 +101,6 @@ def main():
 
     # Plot the mean spectrum and standard deviation spectrum
     plot_mean_and_std_spectrum(mean_spectrum, std_spectrum, sample_rate)
-
-    input()
 
 
 if __name__ == "__main__":

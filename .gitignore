@@ -9,5 +9,6 @@
 /dataSources/
 /dataSources.local.xml
 
-A1/Geheimnisvolle_Wellenlaengen.wav
-A1/nicht_zu_laut_abspielen.wav
+Audios/Geheimnisvolle_Wellenlaengen.wav
+Audios/nicht_zu_laut_abspielen.wav
+/Audios/

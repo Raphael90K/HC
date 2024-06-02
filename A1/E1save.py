@@ -70,21 +70,19 @@ def calculate_statistics(fft_results):
 
 
 def main():
-    file_path = '../A1/nicht_zu_laut_abspielen.wav'  # Update with your actual file path
+    file_path = '../Audios/nicht_zu_laut_abspielen.wav'  # Update with your actual file path
 
     # Load the WAV file
     audio_data, sample_rate = load_wav_file(file_path)
 
     # Parameters for windowing and Fourier transform
     window_size = 88000  # Window size in samples
-    offset = 1  # Overlap size in samples
+    offset = 2200  # Overlap size in samples
 
     malloc = []
     output_file = 'fft_results.h5'
     # Calculate windowed Fourier transforms
     calculate_windowed_fft(audio_data, malloc, window_size, offset, output_file)
-
-    input()
 
 
 if __name__ == "__main__":
