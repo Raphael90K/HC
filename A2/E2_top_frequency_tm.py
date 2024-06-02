@@ -99,7 +99,7 @@ def main():
 
     # Parameters for windowing and Fourier transform
     window_size = 44100  # Window size in samples
-    offset = 100  # Overlap size in samples
+    offset = 441   # Overlap size in samples
     malloc = []
 
     # Calculate windowed Fourier transforms

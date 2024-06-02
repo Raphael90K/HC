@@ -1,8 +1,8 @@
 import json
 import matplotlib.pyplot as plt
 
-dir = 'logs/raw/'
-file_name = 'windows_raw_44100_441.json'
+dir = 'logs/cumulated/'
+file_name = 'windows_44100_441.json'
 
 with open(f'{dir}{file_name}', 'r') as file:
     data = json.load(file)
