@@ -3,14 +3,14 @@ import matplotlib.pyplot as plt
 import os
 
 import numpy as np
-directory = ''
+directory = 'logs/'
 
 # Initialisieren Sie die Figur für das Plotten
 plt.figure(figsize=(10, 6))
 
 
 # Iterieren durch alle Dateien im Verzeichnis
-for filename in os.listdir():
+for filename in os.listdir(directory):
     if filename.endswith('.json'):
         json_file_path = os.path.join(directory, filename)
 
@@ -30,13 +30,13 @@ for filename in os.listdir():
         plt.plot(start_indices, memory_usage, linestyle='-', label=legend_name)
 
 # Titel, Achsenbeschriftungen und Gitter hinzufügen
-plt.title('Arbeitsspeicherbedarf')
+plt.title('Arbeitsspeicherbedarf verschiedener Plattformen')
 plt.xlabel('Start Sample')
 plt.ylabel('Speicherbedarf (Megabyte)')
 plt.grid(True)
 
 # Legende hinzufügen
-plt.legend(title='Platform')
+plt.legend(title='Plattform')
 
 # Diagramm speichern
 plt.savefig(f'{directory}combined_plot.png')
