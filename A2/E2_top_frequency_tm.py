@@ -1,5 +1,8 @@
+import json
 import wave
 from collections import Counter
+from time import time
+
 import numpy as np
 import matplotlib.pyplot as plt
 import tracemalloc
@@ -33,6 +36,7 @@ def calculate_windowed_fft(audio_data, malloc: list, sample_rate, window_size, o
     # List to store all windowed FFT results and additional information
     fft_results = []
 
+    start_time = time()
     tracemalloc.start()
     # Perform sliding window Fourier transform
     start = 0
@@ -65,6 +69,9 @@ def calculate_windowed_fft(audio_data, malloc: list, sample_rate, window_size, o
         # Slide the window
         start = start + offset
 
+    tracemalloc.stop()
+    end_time = time()
+    print(f'runtime: {end_time - start_time}')
     return fft_results
 
 
@@ -91,14 +98,18 @@ def main():
     audio_data, sample_rate = load_wav_file(file_path)
 
     # Parameters for windowing and Fourier transform
-    window_size = 44000  # Window size in samples
-    offset = 2200  # Overlap size in samples
+    window_size = 44100  # Window size in samples
+    offset = 100  # Overlap size in samples
     malloc = []
 
     # Calculate windowed Fourier transforms
     fft_results = calculate_windowed_fft(audio_data, malloc, sample_rate, window_size, offset)
 
     top_frequencies = find_top_frequencies(fft_results)
+
+    malloc_file = f'windows_{window_size}_{offset}.json'
+    with open(malloc_file, 'wt') as f:
+        json.dump(malloc, f, indent=4)
 
     print(top_frequencies)
 

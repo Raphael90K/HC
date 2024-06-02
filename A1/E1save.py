@@ -4,8 +4,6 @@ import tracemalloc
 
 import h5py
 
-from graphicoutput import plot_mean_and_std_spectrum
-
 
 def load_wav_file(file_path):
     """Load a WAV file and return the audio data and sampling rate."""
@@ -81,7 +79,8 @@ def main():
 
     malloc = []
     output_file = 'fft_results.h5'
-    # Calculate windowed Fourier transforms
+
+    # Calculate windowed Fourier transforms and save the windows
     calculate_windowed_fft(audio_data, malloc, window_size, offset, output_file)
 
 
